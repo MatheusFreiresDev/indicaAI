@@ -10,5 +10,4 @@ public class IndicaAiApplication {
 		SpringApplication.run(IndicaAiApplication.class, args);
 	}
 
-
 }
