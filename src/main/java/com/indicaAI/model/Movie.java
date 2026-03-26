@@ -24,4 +24,6 @@ public class Movie {
 
     @Column(name = "poster_path")
     private String posterPath;
+    @Column(name = "overview")
+    private String overview;
 }

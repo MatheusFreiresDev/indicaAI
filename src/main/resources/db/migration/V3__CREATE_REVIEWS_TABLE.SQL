@@ -2,7 +2,6 @@ CREATE TABLE reviews (
     id BIGSERIAL PRIMARY KEY,
     user_id BIGINT NOT NULL,
     movie_id BIGINT NOT NULL,
-    status VARCHAR(20) NOT NULL,
     nota INTEGER CHECK (nota BETWEEN 1 AND 5),
     descricao TEXT,
     watched_at TIMESTAMP,

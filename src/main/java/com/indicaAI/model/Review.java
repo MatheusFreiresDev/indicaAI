@@ -27,10 +27,6 @@ public class Review {
     @JoinColumn(name = "movie_id", nullable = false)
     private Movie movie;
 
-    @Enumerated(EnumType.STRING)
-    @Column(nullable = false)
-    private StatusEnum status;
-
     private Integer nota;
 
     private String descricao;
