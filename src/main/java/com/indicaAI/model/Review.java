@@ -1,6 +1,5 @@
 package com.indicaAI.model;
 
-import com.indicaAI.model.enums.StatusEnum;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -19,20 +18,13 @@ public class Review {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @ManyToOne
-    @JoinColumn(name = "user_id", nullable = false)
-    private User user;
-
-    @ManyToOne
-    @JoinColumn(name = "movie_id", nullable = false)
-    private Movie movie;
+    @OneToOne
+    @JoinColumn(name = "user_movie_id", nullable = false, unique = true)
+    private UserMovie userMovie;
 
     private Integer nota;
 
     private String descricao;
-
-    @Column(name = "watched_at")
-    private LocalDateTime watchedAt;
 
     @Column(name = "created_at")
     private LocalDateTime createdAt;

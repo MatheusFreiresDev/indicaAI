@@ -4,4 +4,5 @@ CREATE TABLE IF NOT EXISTS movies (
     title VARCHAR(255) NOT NULL,
     poster_path VARCHAR(255),
     overview TEXT
+
 );

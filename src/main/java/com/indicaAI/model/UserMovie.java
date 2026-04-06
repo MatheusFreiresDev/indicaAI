@@ -3,6 +3,8 @@ package com.indicaAI.model;
 import jakarta.persistence.*;
 import lombok.*;
 
+import java.time.LocalDateTime;
+
 @Getter
 @Setter
 @NoArgsConstructor
@@ -28,4 +30,7 @@ public class UserMovie {
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
     private com.indicaAI.model.enums.StatusEnum status;
+
+    @Column(name = "watched_at")
+    private LocalDateTime watchedAt;
 }

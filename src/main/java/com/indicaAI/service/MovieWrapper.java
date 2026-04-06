@@ -9,11 +9,11 @@ import org.springframework.stereotype.Component;
 public class MovieWrapper {
 
     public MovieDto tmdbToMovieDto(TmdbMovieDto dto) {
-        return new MovieDto(dto.title(), dto.poster_path(), dto.overview());
+        return new MovieDto(dto.title(), dto.id(), dto.poster_path(), dto.overview());
     }
 
     public MovieDto movieToMovieDto(Movie movie) {
-        return new MovieDto(movie.getTitle(), movie.getPosterPath(), movie.getOverview());
+        return new MovieDto(movie.getTitle(), movie.getTmdbId() ,movie.getPosterPath(), movie.getOverview());
     }
     public Movie tmbdMovieDtoToMovie(TmdbMovieDto dto) {
         if (dto == null) return null;

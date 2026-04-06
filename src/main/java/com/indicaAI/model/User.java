@@ -35,9 +35,6 @@ public class User implements UserDetails {
     private UserRole role;
     @Column(name = "created_at")
     private LocalDateTime created_at;
-    @OneToMany(mappedBy = "user")
-    @JsonIgnore
-    private List<Review> reviews;
     @Override
     public String toString() {
         return "Usuario{id=" + id + ", nome='" + username + "', email='" + email + "'}";

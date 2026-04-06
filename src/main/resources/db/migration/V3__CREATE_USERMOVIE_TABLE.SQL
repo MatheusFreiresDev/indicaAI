@@ -5,6 +5,7 @@ CREATE TABLE user_movie (
     movie_id BIGINT NOT NULL,
 
     status VARCHAR(20) NOT NULL,
+    watched_at TIMESTAMP,
 
     CONSTRAINT fk_user_movie_user
         FOREIGN KEY (user_id)

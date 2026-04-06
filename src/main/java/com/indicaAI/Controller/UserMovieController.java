@@ -1,5 +1,6 @@
 package com.indicaAI.Controller;
 
+import com.indicaAI.dtos.StatusDto;
 import com.indicaAI.dtos.UserMovieRequest;
 import com.indicaAI.dtos.UserMovieResponse;
 import com.indicaAI.service.UserMovieService;
@@ -39,9 +40,9 @@ public class UserMovieController {
     @PatchMapping("/{id}")
     public ResponseEntity<UserMovieResponse> updateStatus(
             @PathVariable Long id,
-            @RequestBody com.indicaAI.model.enums.StatusEnum status,
+            @RequestBody StatusDto status,
             @AuthenticationPrincipal UserDetails userDetails) {
-        return ResponseEntity.ok(userMovieService.updateStatus(id, status, userDetails.getUsername()));
+        return ResponseEntity.ok(userMovieService.updateStatus(id, status.status(), userDetails.getUsername()));
     }
 
     @DeleteMapping("/{id}")

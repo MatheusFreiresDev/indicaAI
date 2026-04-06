@@ -26,34 +26,52 @@ public class SecurityFilter extends OncePerRequestFilter {
 
 
     @Override
-    protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
+    protected void doFilterInternal(HttpServletRequest request,
+                                    HttpServletResponse response,
+                                    FilterChain filterChain) throws ServletException, IOException {
+
         String path = request.getRequestURI();
+
+        // libera rotas públicas
         if (path.startsWith("/auth/")
                 || path.startsWith("/swagger-ui")
                 || path.startsWith("/v3/api-docs")) {
             filterChain.doFilter(request, response);
             return;
         }
+
         String token = recoverToken(request);
+
         if (token != null) {
             try {
                 String email = tokenService.validateToken(token);
+
                 User usuario = userRepository
                         .findByEmail(email)
                         .orElse(null);
-                if(usuario.equals(null)){
-                    throw new NotExistEception("ERRO: User Not Exist");
+
+                if (usuario == null) {
+                    response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+                    response.getWriter().write("Usuário não encontrado.");
+                    return;
                 }
-                var authentication =
-                        new UsernamePasswordAuthenticationToken(usuario,null,usuario.getAuthorities());
+
+                var authentication = new UsernamePasswordAuthenticationToken(
+                        usuario,
+                        null,
+                        usuario.getAuthorities()
+                );
+
                 SecurityContextHolder.getContext().setAuthentication(authentication);
-                } catch (JWTCreationException e) {
+
+            } catch (JWTCreationException e) {
                 SecurityContextHolder.clearContext();
                 response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
                 response.getWriter().write("Token inválido ou expirado.");
                 return;
             }
         }
+
         filterChain.doFilter(request, response);
     }
 
