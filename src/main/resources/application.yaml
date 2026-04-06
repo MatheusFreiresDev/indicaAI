@@ -1,3 +1,7 @@
+tmdb:
+  api:
+    key: 30fbeb3d95ad48fcda0cf4224f317023
+    url: https://api.themoviedb.org/3
 spring:
   application:
     name: indicaAI

@@ -28,6 +28,14 @@ public class TmbdService {
                 .block();
         return response.results();
     }
+    public TmdbMovieDto searchFilmById(Long tmdbId) {
+        String url = this.url + "/movie/" + tmdbId + "?api_key=" + apiKey + "&language=pt-BR";
+        return webClient.get()
+                .uri(url)
+                .retrieve()
+                .bodyToMono(TmdbMovieDto.class)
+                .block();
+    }
 
     private String makeUrl(String title) {
         return url + "/search/movie?api_key=" + apiKey + "&query=" + title + "&language=pt-BR";
