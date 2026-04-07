@@ -24,6 +24,7 @@ public class PublicUserService {
     private final UserRepository userRepository;
     private final UserMovieRepository userMovieRepository;
     private final ReviewRepository reviewRepository;
+    private final ReviewService reviewService;
 
     @Transactional(readOnly = true)
     public List<MovieStatusResponse> getUserMovies(String userName) {
@@ -37,11 +38,7 @@ public class PublicUserService {
 
     @Transactional(readOnly = true)
     public List<ReviewResponse> getUserReviews(String userName) {
-        Long userId = userRepository.findByNickname(userName).get().getId();
-        return reviewRepository.findAllByUserMovieUserId(userId)
-                .stream()
-                .map(r -> new ReviewResponse(r.getUserMovie().getId(),r.getUserMovie().getId(),r.getUserMovie().getUser().getUsername() ,r.getNota(),r.getDescricao()))
-                .collect(Collectors.toList());
+        return reviewService.getReviewsByNickname(userName);
     }
 
     @Transactional(readOnly = true)
