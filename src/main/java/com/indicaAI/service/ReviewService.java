@@ -88,20 +88,25 @@ public class ReviewService {
         User user = getUserByEmail(email);
         return reviewRepository.findAllByUserMovieUserId(user.getId());
     }
-
-    private User getUserByEmail(String email) {
-        return userRepository.findByEmail(email)
-                .orElseThrow(() -> new NotFoundException("Usuário não encontrado"));
+    public List<ReviewResponse> getAllReviews() {
+        List<ReviewResponse> reviews = reviewRepository.findAllByOrderByCreatedAtDesc().stream().map(ReviewWrapper::reviewToReviewResponse).toList();
+        return reviews;
     }
+    public List<ReviewResponse> getReviewsByNickname(String nickname){
+     User user = userRepository.findByNickname(nickname).orElseThrow(()-> new NotFoundException("Usuario nao existe."));
+      return reviewRepository.findAllByUserMovieUserId(user.getId()).stream().map(ReviewWrapper::reviewToReviewResponse).toList();
+    };
+
 
     private void validarNota(Integer nota) {
         if (nota == null || nota < 0 || nota > 10) {
             throw new InvalidDataException("Nota deve ser entre 0 e 10");
         }
     }
-
-    public List<ReviewResponse> getAllReviews() {
-        List<ReviewResponse> reviews = reviewRepository.findAllByOrderByCreatedAtDesc().stream().map(ReviewWrapper::reviewToReviewResponse).toList();
-        return reviews;
+    private User getUserByEmail(String email) {
+        return userRepository.findByEmail(email)
+                .orElseThrow(() -> new NotFoundException("Usuário não encontrado"));
     }
+
+
 }
