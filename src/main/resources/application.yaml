@@ -1,17 +1,17 @@
 openai:
-  api-key: {$OPENAIKEY}
+  api-key: ${OPENAIKEY}
+
 tmdb:
   api:
-    key: 30fbeb3d95ad48fcda0cf4224f317023
+    key: ${TMDBKEY}
     url: https://api.themoviedb.org/3
+
 spring:
   application:
     name: indicaAI
 
   datasource:
-    url: jdbc:postgresql://localhost:5432/indicaAI_bd
-    username: postgre
-    password: postgre
+    url: ${DATABASE_URL}
     driver-class-name: org.postgresql.Driver
 
   flyway:
@@ -19,6 +19,7 @@ spring:
     locations: classpath:db/migration
     out-of-order: true
     repair-on-migrate: true
+    baseline-on-migrate: true
 
   jpa:
     hibernate:
@@ -26,3 +27,5 @@ spring:
     show-sql: true
     database-platform: org.hibernate.dialect.PostgreSQLDialect
 
+server:
+  port: ${PORT:8080}
