@@ -46,7 +46,7 @@ public class AuthService {
             throw new AlreadyExistException("Email já cadastrado.");
         }
         User user = new User();
-        user.setUsername(cadastroDto.username());
+        user.setNickname(cadastroDto.username());
         user.setEmail(cadastroDto.email());
         user.setSenha(encoder.encode(cadastroDto.password()));
         user.setRole(UserRole.USER);

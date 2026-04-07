@@ -1,6 +1,10 @@
 package com.indicaAI.service;
-
 import com.indicaAI.dtos.ReviewRequest;
+import com.indicaAI.dtos.ReviewResponse;
+import com.indicaAI.exception.AlreadyExistException;
+import com.indicaAI.exception.ForbiddenException;
+import com.indicaAI.exception.InvalidDataException;
+import com.indicaAI.exception.NotFoundException;
 import com.indicaAI.model.Review;
 import com.indicaAI.model.User;
 import com.indicaAI.model.UserMovie;
@@ -9,7 +13,6 @@ import com.indicaAI.repository.UserMovieRepository;
 import com.indicaAI.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
-
 import java.time.LocalDateTime;
 import java.util.List;
 
@@ -24,17 +27,17 @@ public class ReviewService {
     public Review create(Long userMovieId, ReviewRequest request, String email) {
         User user = getUserByEmail(email);
         UserMovie userMovie = userMovieRepository.findById(userMovieId)
-                .orElseThrow(() -> new RuntimeException("UserMovie não encontrado"));
+                .orElseThrow(() -> new NotFoundException("UserMovie não encontrado"));
         if (!userMovie.getUser().getId().equals(user.getId())) {
-            throw new RuntimeException("Não é teu");
+            throw new ForbiddenException("Não é teu");
         }
 
-        if (!userMovie.getStatus().name().equals("ASSISTIDO")) {
-            throw new RuntimeException("Só pode avaliar filmes assistidos");
+        if (!(userMovie.getStatus() == com.indicaAI.model.enums.StatusEnum.ASSISTIDO)) {
+            throw new InvalidDataException("Só pode avaliar filmes assistidos");
         }
 
-        if (reviewRepository.findByUserMovieId(userMovieId).isPresent()) {
-            throw new RuntimeException("Review já existe");
+        if (reviewRepository.findByUserMovieIdOrderByCreatedAtDesc(userMovieId).isPresent()) {
+            throw new AlreadyExistException("Review já existe");
         }
 
         validarNota(request.nota());
@@ -54,10 +57,10 @@ public class ReviewService {
         User user = getUserByEmail(email);
 
         Review review = reviewRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Review não encontrada"));
+                .orElseThrow(() -> new NotFoundException("Review não encontrada"));
 
         if (!review.getUserMovie().getUser().getId().equals(user.getId())) {
-            throw new RuntimeException("Não é tua");
+            throw new ForbiddenException("Não é tua");
         }
 
         validarNota(request.nota());
@@ -73,10 +76,10 @@ public class ReviewService {
         User user = getUserByEmail(email);
 
         Review review = reviewRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Review não encontrada"));
+                .orElseThrow(() -> new NotFoundException("Review não encontrada"));
 
         if (!review.getUserMovie().getUser().getId().equals(user.getId())) {
-            throw new RuntimeException("Não é tua");
+            throw new ForbiddenException("Não é tua");
         }
 
         reviewRepository.delete(review);
@@ -88,12 +91,17 @@ public class ReviewService {
 
     private User getUserByEmail(String email) {
         return userRepository.findByEmail(email)
-                .orElseThrow(() -> new RuntimeException("Usuário não encontrado"));
+                .orElseThrow(() -> new NotFoundException("Usuário não encontrado"));
     }
 
     private void validarNota(Integer nota) {
         if (nota == null || nota < 0 || nota > 10) {
-            throw new RuntimeException("Nota deve ser entre 0 e 10");
+            throw new InvalidDataException("Nota deve ser entre 0 e 10");
         }
+    }
+
+    public List<ReviewResponse> getAllReviews() {
+        List<ReviewResponse> reviews = reviewRepository.findAllByOrderByCreatedAtDesc().stream().map(ReviewWrapper::reviewToReviewResponse).toList();
+        return reviews;
     }
 }

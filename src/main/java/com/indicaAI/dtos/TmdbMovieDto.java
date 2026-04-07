@@ -5,4 +5,5 @@ public record TmdbMovieDto( Long id,
                             String poster_path,
                             String release_date,
                             String overview) {
+
 }

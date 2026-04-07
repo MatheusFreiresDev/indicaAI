@@ -26,7 +26,7 @@ public class User implements UserDetails {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    private String username;
+    private String nickname;
     private String email;
     @JsonIgnore
     @Column(name = "password")
@@ -37,7 +37,7 @@ public class User implements UserDetails {
     private LocalDateTime created_at;
     @Override
     public String toString() {
-        return "Usuario{id=" + id + ", nome='" + username + "', email='" + email + "'}";
+        return "Usuario{id=" + id + ", nome='" + nickname + "', email='" + email + "'}";
     }
     @JsonIgnore
     @Override
@@ -46,6 +46,9 @@ public class User implements UserDetails {
             return List.of(new SimpleGrantedAuthority("ROLE_ADMIN"));
         }
         return List.of(new SimpleGrantedAuthority("ROLE_USER"));
+    }
+    public String getNickName(){
+        return nickname;
     }
     public UserRole getAuthority() {
         return role;

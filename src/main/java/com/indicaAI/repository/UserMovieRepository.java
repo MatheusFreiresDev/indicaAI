@@ -8,4 +8,5 @@ import java.util.List;
 public interface UserMovieRepository extends JpaRepository<UserMovie, Long> {
     List<UserMovie> findByUserId(Long userId);
     boolean existsByUserIdAndMovieId(Long userId, Long movieId);
+    int countByUserIdAndStatus(Long userId, com.indicaAI.model.enums.StatusEnum status);
 }

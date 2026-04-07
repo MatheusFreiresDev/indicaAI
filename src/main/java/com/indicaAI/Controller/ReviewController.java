@@ -60,4 +60,9 @@ public class ReviewController {
         reviewService.delete(id, user.getUsername());
         return ResponseEntity.noContent().build();
     }
+
+    @GetMapping("/all")
+    public ResponseEntity<List<ReviewResponse>> reviews() {
+        return ResponseEntity.ok(reviewService.getAllReviews());
+    }
 }

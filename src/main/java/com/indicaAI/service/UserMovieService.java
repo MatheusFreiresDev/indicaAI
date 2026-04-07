@@ -9,7 +9,6 @@ import com.indicaAI.model.UserMovie;
 import com.indicaAI.repository.UserMovieRepository;
 import com.indicaAI.repository.UserRepository;
 import org.springframework.stereotype.Service;
-
 import java.util.List;
 
 @Service
@@ -31,7 +30,6 @@ public class UserMovieService {
     public UserMovieResponse addMovie(UserMovieRequest request, String userEmail) {
         User user = userRepository.findByEmail(userEmail)
                 .orElseThrow(() -> new RuntimeException("Usuário não encontrado."));
-        // Busca filme no TMDB e salva se não existir
         TmdbMovieDto tmdbMovie = tmbdService.searchFilmById(request.tmdbId());
         Movie movie = movieService.saveMovie(tmdbMovie);
 

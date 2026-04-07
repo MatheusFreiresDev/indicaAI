@@ -1,13 +1,10 @@
 package com.indicaAI.service;
-
 import com.indicaAI.dtos.MovieDto;
-import com.indicaAI.dtos.TmbdResponse;
 import com.indicaAI.dtos.TmdbMovieDto;
+import com.indicaAI.exception.InvalidDataException;
 import com.indicaAI.model.Movie;
 import com.indicaAI.repository.MovieRepository;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
 import java.util.List;
 import java.util.function.Supplier;
 
@@ -27,7 +24,7 @@ public class MovieService {
 
     public List<MovieDto> searchMovies(String title) {
         if (title == null || title.isBlank()) {
-            throw new RuntimeException("Title inválido.");
+            throw new InvalidDataException("Title inválido.");
         }
 
         List<Movie> localMovies = movieRepository.findAllByTitleContainingIgnoreCase(title);
