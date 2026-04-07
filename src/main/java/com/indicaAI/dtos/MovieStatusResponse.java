@@ -1,4 +1,3 @@
 package com.indicaAI.dtos;
 
-public class MovieStatusResponse {
-}
+public record MovieStatusResponse(Long movieId, String status) {}
