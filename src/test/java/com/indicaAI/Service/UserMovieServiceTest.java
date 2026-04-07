@@ -1,4 +1,4 @@
-package com.indicaAI.service;
+package com.indicaAI.Service;
 
 import com.indicaAI.dtos.TmdbMovieDto;
 import com.indicaAI.dtos.UserMovieRequest;
@@ -9,6 +9,9 @@ import com.indicaAI.model.UserMovie;
 import com.indicaAI.model.enums.StatusEnum;
 import com.indicaAI.repository.UserMovieRepository;
 import com.indicaAI.repository.UserRepository;
+import com.indicaAI.service.MovieService;
+import com.indicaAI.service.TmbdService;
+import com.indicaAI.service.UserMovieService;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 
@@ -47,7 +50,13 @@ class UserMovieServiceTest {
 
         UserMovieRequest request = new UserMovieRequest(123L, StatusEnum.QUERO_VER);
 
-        TmdbMovieDto tmdbDto = new TmdbMovieDto();
+        TmdbMovieDto tmdbDto = new TmdbMovieDto(
+                123L,
+                "Batman",
+                "desc",
+                "/img.jpg",
+                "8"
+        );
 
         Movie movie = new Movie();
         movie.setId(10L);
@@ -77,6 +86,15 @@ class UserMovieServiceTest {
         User user = new User();
         user.setId(1L);
 
+        // ✅ CORRIGIDO AQUI TAMBÉM
+        TmdbMovieDto tmdbDto = new TmdbMovieDto(
+                1L,
+                "Filme",
+                "desc",
+                "/img.jpg",
+                "8"
+        );
+
         Movie movie = new Movie();
         movie.setId(10L);
 
@@ -84,7 +102,7 @@ class UserMovieServiceTest {
                 .thenReturn(Optional.of(user));
 
         when(tmbdService.searchFilmById(any()))
-                .thenReturn(new TmdbMovieDto());
+                .thenReturn(tmdbDto);
 
         when(movieService.saveMovie(any()))
                 .thenReturn(movie);
@@ -93,7 +111,10 @@ class UserMovieServiceTest {
                 .thenReturn(true);
 
         assertThrows(RuntimeException.class, () ->
-                userMovieService.addMovie(new UserMovieRequest(1L, StatusEnum.QUERO_VER), "test@gmail.com")
+                userMovieService.addMovie(
+                        new UserMovieRequest(1L, StatusEnum.QUERO_VER),
+                        "test@gmail.com"
+                )
         );
     }
 }
